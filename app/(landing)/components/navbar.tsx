@@ -10,7 +10,7 @@ const Navbar = () => {
         <div className="flex gap-x-[0.625rem] font-semibold text-zinc-800 items-center">
         {/* not final image component */}
         <Image src={jkccLogo} alt='logo' width={25} height={25}/>
-        <h1 className='text-m '>{"Expert in Computer | Expect More"}</h1>
+        <h1 className='text-m select-none'>{"Expert in Computer | Expect More"}</h1>
         </div>
         <div className="flex text-zinc-800 gap-x-[3.5rem] text-sm font-medium items-center ">
             {/* <a href="">{"Home"}</a>
