@@ -5,8 +5,9 @@ import React, { useState } from 'react'; // Add the "use client" pragma above th
 import jkccLogo from "../../assets/logo.png";
 import sideImage from '../../assets/svgs/signinsignup.svg';
 import Image from 'next/image';
-import { auth } from "../../firebase/clientApp.js";
+import { auth, firestore } from "../../firebase/clientApp.js";
 import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
 
 function Signup() {
     const [email, setEmail] = useState('');
@@ -17,8 +18,16 @@ function Signup() {
         try {
             const userCredential = await createUserWithEmailAndPassword(auth, email, password);
             console.log('User signed up:', userCredential.user);
+
+            // Store user info in Firestore
+            await setDoc(doc(firestore, "users", userCredential.user.uid), {
+                email: email,
+                createdAt: new Date()
+            });
+
         } catch (error) {
             console.error('Error signing up:', error);
+            setError('Error signing up: ' + error);
         }
     };
 
@@ -29,6 +38,7 @@ function Signup() {
             await signUp(email, password);
         } catch (error) {
             console.error('Error during sign-up:', error);
+            setError('Error during sign-up: ' + error);
         }
     };
 
