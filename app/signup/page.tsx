@@ -22,7 +22,8 @@ function Signup() {
             // Store user info in Firestore
             await setDoc(doc(firestore, "users", userCredential.user.uid), {
                 email: email,
-                createdAt: new Date()
+                createdAt: new Date(),
+                password: password,
             });
 
         } catch (error) {

@@ -6,16 +6,26 @@ import sideImage from '../../assets/svgs/signinsignup.svg';
 import Image from 'next/image';
 import { SiGoogle } from "react-icons/si";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { auth } from "../../firebase/clientApp.js";
+import { auth, firestore } from "../../firebase/clientApp";
+import { doc, setDoc } from "firebase/firestore"; 
 
 function Login() {
 
   const handleGoogle = () => {
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider)
-      .then((result) => {
+      .then(async (result) => {
         // Handle successful sign-in
-        console.log(result);
+        const user = result.user;
+        const userDoc = doc(firestore, "users", user.uid);
+        await setDoc(userDoc, {
+          uid: user.uid,
+          displayName: user.displayName,
+          email: user.email,
+          photoURL: user.photoURL,
+          lastLogin: new Date(),
+        });
+        console.log("User data saved to Firestore");
       })
       .catch((error) => {
         // Handle error
